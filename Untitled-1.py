@@ -6,9 +6,6 @@
 
 definiciones = {"defVar": "definicion_variable", "defProc": "definicion_procedure" }
 
-simbolos = { "{": "open_bracket",    "}": "close_bracket",    "(":"open_parentesis",    ")": "close_parentesis",
-            "()": "combined_parentesis",    ":" : "colon",    ";" : "semicolon",     "," : "coma"}
-
 
 
 def isCommand (texto):
@@ -81,9 +78,72 @@ def isCondition(text):
         palabra_comando = text[pos_comando:(pos_comando+12)]
         if isCommand(palabra_comando) == True:
             Condition = True 
+            
+    return Condition
     
     
-if 
+def isValidControl (text):
+    
+    Valid_control = False
+    
+    if "if" in text:
+        condicion = text[2:17]
+    
+        if isCondition(condicion) == True:
+            
+            if (  "{"  in text) and (  "}" in text):
+                
+                split1 = text.split("{")
+                split2 = split1[1].split("}")
+                comando = split2[0]
+                
+                if (isCommand(comando) == True) and ("else" in text) and text[text.find("else")+4] == "{" and  text[len(text)-1] == "}":
+                    
+                    split3 = text.split("{")
+                    split4 = split3[2].split("}")
+                    comando2 = split2[0]
+                    
+                    if isCommand(comando2) == True:
+                        Valid_control = True
+                        
+    
+    if "while" in text:
+
+        condicion2 = text[2:17]
+        
+        if isCondition(condicion2) == True:
+            
+            if (  "{"  in text) and (  "}" in text):
+                
+                split5 = text.split("{")
+                split6 = split5[1].split("}")
+                comando3 = split6[0]
+                
+                if isCommand(comando3) == True:
+                    Valid_control = True
+                    
+                    
+    if "repeat" in text and "times" in text and text[6].isdigit():
+        
+        if (  "{"  in text) and (  "}" in text):
+            
+            split7 = text.split("{")
+            split8 = split7[1].split("}")
+            comando4 = split8[0]
+                
+            if isCommand(comando4) == True:
+                Valid_control = True
+        
+            
+                    
+                    
+                    
+                    
+                
+                
+            
+            
+            
     
     
        
