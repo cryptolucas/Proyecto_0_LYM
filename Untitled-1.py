@@ -38,11 +38,11 @@ def isCommand (texto):
                 Command = True
                 
     if "turn" in texto_n:
-        if texto_n[5:9] == "left" or texto_n[5] == "right" or texto_n[5] == "around":
+        if texto_n[5:9] == "left" or texto_n[5:10] == "right" or texto_n[5:11] == "around":
             Command = True
             
     if "turnto" in texto_n:
-        if texto_n[7] == "north" or texto_n[7] == "east" or texto_n[7] == "south" or texto_n[7] == "west":
+        if texto_n[7:12] == "north" or texto_n[7:11] == "east" or texto_n[7:12] == "south" or texto_n[7:11] == "west":
             Command = True
             
     if "drop" in texto_n:
@@ -66,8 +66,28 @@ def isCommand (texto):
     
     return Command        
                 
+def isCondition(text):
+    Condition = False
     
+    
+    if "facing(north)" in text or  "facing(east)" in text or  "facing(west)" in text or  "facing(south)" in text:
+        Condition = True
+        
+
+    
+    if "can" in text:
+        donde_can = text.find("can")
+        pos_comando = donde_can + 4
+        palabra_comando = text[pos_comando:(pos_comando+12)]
+        if isCommand(palabra_comando) == True:
+            Condition = True 
+    
+    
+if 
+    
+    
+       
         
             
     
-print(isCommand(("  turn( north   )  ")))
+print(isCommand(("  turn( left   )  ")))
