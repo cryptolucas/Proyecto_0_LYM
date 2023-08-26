@@ -2,16 +2,24 @@
 
 """Proyecto 0 LYM"""
 
-#archivo = open("archivo.txt")
-
-definiciones = {"defVar": "definicion_variable", "defProc": "definicion_procedure" }
 
 
 
-def isCommand (texto):
-    Command = False
-    texto_n = texto.replace(" ", "")
+
+lista_defprocs = []
+numero_llaves_abiertas = 0
+numero_llaves_cerradas = 0
+
+lineas_archivo = 0
+lineas_validas = 0
+defproc_valido = False
+
+
+
+def isCommand (texto_n):
     
+    Command = False
+        
     if "jump" in texto_n:
         if texto_n[5].isdigit() and texto_n[7].isdigit():
             Command = True
@@ -101,7 +109,7 @@ def isValidControl (text):
                     
                     split3 = text.split("{")
                     split4 = split3[2].split("}")
-                    comando2 = split2[0]
+                    comando2 = split4[0]
                     
                     if isCommand(comando2) == True:
                         Valid_control = True
@@ -135,19 +143,70 @@ def isValidControl (text):
                 Valid_control = True
         
             
-                    
-                    
-                    
-                    
-                
-                
-            
-            
-            
+    return Valid_control
+
+
+
+def isValidDefinition (text):
     
+    Valid_definition = False
     
-       
+    if ("defVar" in text) and (text[6].isdigit() == False) and ( text[len(text)-1].isdigit() == True):
+        Valid_definition == True
+    
+    if ("defProc" in text) and ("(" in text) and (")" in text) and text[len(text)-1] != ";":
+        Valid_definition = True
+        x = text.split("c")
+        z = x[1].split("(")
+        nombre_defproc = z[0]
+        lista_defprocs.append(nombre_defproc)
+    
+    return Valid_definition
         
-            
+def llaves_correctas (text):
+
+    if text == "{" or "{" in text:
+        numero_llaves_abiertas += 1
+        
+    if text == "}" or "}" in text:
+        numero_llaves_cerradas += 1
     
-print(isCommand(("  turn( left   )  ")))
+
+
+
+with open("archivo.txt", "r") as archivo:
+    
+    for linea in archivo:
+        
+        lineas_archivo += 0
+        linea_n = linea.replace(" ", "")
+        
+        llaves_correctas(linea_n)
+        
+        for defproc in lista_defprocs:
+            if defproc in linea_n and linea_n[len(linea_n)-1] == ";":
+                defproc_valido = True
+                
+        
+        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";") or 
+              (isValidControl(linea_n) == True)  or (isValidDefinition(linea_n) == True)
+              or (defproc_valido == True)):
+            
+            lineas_validas += 1
+            
+        
+
+def resultado():
+    if (lineas_archivo == lineas_validas) and (numero_llaves_abiertas == numero_llaves_cerradas):
+        return "Programa válido"
+    else:
+        return "Programa inválido"
+            
+            
+                                                                              
+            
+        
+        
+    
+        
+
