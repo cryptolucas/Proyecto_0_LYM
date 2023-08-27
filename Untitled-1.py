@@ -12,7 +12,7 @@ numero_llaves_cerradas = 0
 
 lineas_archivo = 0
 lineas_validas = 0
-defproc_valido = False
+
 
 
 
@@ -178,7 +178,8 @@ with open("archivo.txt", "r") as archivo:
     
     for linea in archivo:
         
-        lineas_archivo += 0
+        lineas_archivo += 1
+        defproc_valido = False
         linea_n = linea.replace(" ", "")
         
         llaves_correctas(linea_n)
