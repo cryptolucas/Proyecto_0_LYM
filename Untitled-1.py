@@ -151,8 +151,8 @@ def isValidDefinition (text):
     
     Valid_definition = False
     
-    if ("defVar" in text) and (text[6].isdigit() == False) and ( text[len(text)-1].isdigit() == True):
-        Valid_definition == True
+    if ("defVar" in text) and text[len(text)-1].isdigit() == True:
+        Valid_definition = True
     
     if ("defProc" in text) and ("(" in text) and (")" in text) and text[len(text)-1] != ";":
         Valid_definition = True
@@ -163,18 +163,10 @@ def isValidDefinition (text):
     
     return Valid_definition
         
-def llaves_correctas (text):
-
-    if text == "{" or "{" in text:
-        numero_llaves_abiertas += 1
-        
-    if text == "}" or "}" in text:
-        numero_llaves_cerradas += 1
-    
 
 
 
-with open("archivo.txt", "r") as archivo:
+with open("data/archivo_valido2.txt", "r") as archivo:
     
     for linea in archivo:
         
@@ -182,30 +174,43 @@ with open("archivo.txt", "r") as archivo:
         defproc_valido = False
         linea_n = linea.replace(" ", "")
         
-        llaves_correctas(linea_n)
+        if linea_n == "{" or "{" in linea_n:
+            numero_llaves_abiertas += 1
+        
+        if linea_n == "}" or "}" in linea_n:
+            numero_llaves_cerradas += 1
+        
         
         for defproc in lista_defprocs:
-            if defproc in linea_n and linea_n[len(linea_n)-1] == ";":
+           if (defproc in linea_n) and (linea_n[len(linea_n)-1] == ";") and ("defProc" not in linea_n):
                 defproc_valido = True
                 
         
-        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";") or 
-              (isValidControl(linea_n) == True)  or (isValidDefinition(linea_n) == True)
-              or (defproc_valido == True)):
+        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";")  or (isValidControl(linea_n) == True)  or 
+            (isValidDefinition(linea_n) == True) or (defproc_valido == True)  ):
             
             lineas_validas += 1
             
-        
+            
+            
 
-def resultado():
-    if (lineas_archivo == lineas_validas) and (numero_llaves_abiertas == numero_llaves_cerradas):
-        return "Programa válido"
-    else:
-        return "Programa inválido"
+lvalidas = lineas_validas        
+larchivo = lineas_archivo
+nabiertas = numero_llaves_abiertas
+ncerradas = numero_llaves_cerradas
+
+if (nabiertas == ncerradas):
+        lfinales = lvalidas + nabiertas + ncerradas
+        
+if (larchivo == lfinales): 
+         print("Programa válido")
+else:
+        print("Programa inválido")
             
-            
-                                                                              
-            
+     
+
+                                                                             
+          
         
         
     
