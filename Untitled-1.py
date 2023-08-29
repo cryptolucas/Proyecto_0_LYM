@@ -27,7 +27,10 @@ def isCommand (texto_n):
     if "walk" in texto_n:
         if texto_n[5].isdigit():
             
-            if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7]):
+            if (texto_n[5].isdigit())and (texto_n[6] == ")" ):
+                Command = True
+            
+            if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7:11]):
                 Command = True
             
             if ("north" == texto_n[7:12]) or ("east" == texto_n[7:11]) or ("south" == texto_n[7:12]) or ("west" == texto_n[7:11]):
@@ -36,7 +39,10 @@ def isCommand (texto_n):
     if "leap" in texto_n:
         if texto_n[5].isdigit():
             
-            if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7]):
+            if (texto_n[5].isdigit())and (texto_n[6] == ")" ):
+                Command = True
+            
+            if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7:11]):
                 Command = True
             
             if ("north" == texto_n[7:12]) or ("east" == texto_n[7:11]) or ("south" == texto_n[7:12]) or ("west" == texto_n[7:11]):
@@ -95,7 +101,8 @@ def isValidControl (text):
     Valid_control = False
     
     if "if" in text:
-        condicion = text[2:17]
+        
+        condicion = text[2:25]
     
         if isCondition(condicion) == True:
             
@@ -105,11 +112,10 @@ def isValidControl (text):
                 split2 = split1[1].split("}")
                 comando = split2[0]
                 
-                if (isCommand(comando) == True) and ("else" in text) and text[text.find("else")+4] == "{" and  text[len(text)-1] == "}":
+                
+                if (isCommand(comando) == True) and ("else" in text):
                     
-                    split3 = text.split("{")
-                    split4 = split3[2].split("}")
-                    comando2 = split4[0]
+                    comando2 = text[(text.find("else")+4):(len(text))]
                     
                     if isCommand(comando2) == True:
                         Valid_control = True
@@ -117,18 +123,11 @@ def isValidControl (text):
     
     if "while" in text:
 
-        condicion2 = text[2:17]
+        condicion2 = text[5:35]
         
         if isCondition(condicion2) == True:
-            
-            if (  "{"  in text) and (  "}" in text):
-                
-                split5 = text.split("{")
-                split6 = split5[1].split("}")
-                comando3 = split6[0]
-                
-                if isCommand(comando3) == True:
-                    Valid_control = True
+          
+            Valid_control = True
                     
                     
     if "repeat" in text and "times" in text and text[6].isdigit():
@@ -151,10 +150,10 @@ def isValidDefinition (text):
     
     Valid_definition = False
     
-    if ("defVar" in text) and text[len(text)-1].isdigit() == True:
+    if ("defVar" in text) and (text[len(text)-1].isdigit() == True):
         Valid_definition = True
     
-    if ("defProc" in text) and ("(" in text) and (")" in text) and text[len(text)-1] != ";":
+    if ("defProc" in text) and ("(" in text) and (")" in text):
         Valid_definition = True
         x = text.split("c")
         z = x[1].split("(")
@@ -166,7 +165,7 @@ def isValidDefinition (text):
 
 
 
-with open("data/archivo_valido2.txt", "r") as archivo:
+with open("data/pruebafinal.txt", "r") as archivo:
     
     for linea in archivo:
         
@@ -182,17 +181,20 @@ with open("data/archivo_valido2.txt", "r") as archivo:
         
         
         for defproc in lista_defprocs:
-           if (defproc in linea_n) and (linea_n[len(linea_n)-1] == ";") and ("defProc" not in linea_n):
-                defproc_valido = True
+           if (defproc in linea_n) and ("defProc" not in linea_n):
+               defproc_valido = True
                 
         
-        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";")  or (isValidControl(linea_n) == True)  or 
+        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";" )  or (isValidControl(linea_n) == True)  or 
             (isValidDefinition(linea_n) == True) or (defproc_valido == True)  ):
             
             lineas_validas += 1
             
+        if len(linea_n) == 1:
+            lineas_validas += 1
             
             
+ 
 
 lvalidas = lineas_validas        
 larchivo = lineas_archivo
@@ -207,12 +209,6 @@ if (larchivo == lfinales):
 else:
         print("Programa inválido")
             
-     
 
-                                                                             
-          
-        
-        
-    
-        
+
 
