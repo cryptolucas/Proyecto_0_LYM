@@ -165,7 +165,7 @@ def isValidDefinition (text):
 
 
 
-with open("data/pruebafinal.txt", "r") as archivo:
+with open("data/valido_2.txt", "r") as archivo:
     
     for linea in archivo:
         
@@ -200,15 +200,21 @@ lvalidas = lineas_validas
 larchivo = lineas_archivo
 nabiertas = numero_llaves_abiertas
 ncerradas = numero_llaves_cerradas
-
-if (nabiertas == ncerradas):
-        lfinales = lvalidas + nabiertas + ncerradas
-        
-if (larchivo == lfinales): 
+print(lvalidas)
+print(larchivo)
+print(nabiertas)
+print(ncerradas)
+try:
+    if (nabiertas == ncerradas):
+        lfinales = lvalidas + nabiertas + ncerradas   
+    if (larchivo == lfinales): 
          print("Programa válido")
-else:
+    else:
         print("Programa inválido")
-            
+except:
+     if (nabiertas != ncerradas):
+         print("Programa inválido")
+                   
 
 
 
