@@ -25,9 +25,9 @@ def isCommand (texto_n):
             Command = True
             
     if "walk" in texto_n:
-        if texto_n[5].isdigit():
+        if texto_n[5].isdigit() or texto_n[5].isalpha():
             
-            if (texto_n[5].isdigit())and (texto_n[6] == ")" ):
+            if (texto_n[5].isdigit() or texto_n[5].isalpha()) and (texto_n[6] == ")" ):
                 Command = True
             
             if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7:11]):
@@ -37,9 +37,9 @@ def isCommand (texto_n):
                 Command = True
                 
     if "leap" in texto_n:
-        if texto_n[5].isdigit():
+        if texto_n[5].isdigit() or texto_n[5].isalpha():
             
-            if (texto_n[5].isdigit())and (texto_n[6] == ")" ):
+            if (texto_n[5].isdigit() or texto_n[5].isalpha()) and (texto_n[6] == ")" ):
                 Command = True
             
             if ("front" == texto_n[7:12]) or ("right" == texto_n[7:12]) or ("left" == texto_n[7:11]) or ("back" == texto_n[7:11]):
@@ -57,19 +57,19 @@ def isCommand (texto_n):
             Command = True
             
     if "drop" in texto_n:
-        if texto_n[5].isdigit():
+        if texto_n[5].isdigit() or texto_n[5].isalpha():
             Command = True
             
     if "get" in texto_n:
-        if texto_n[4].isdigit():
+        if texto_n[4].isdigit() or texto_n[4].isalpha():
             Command = True
         
     if "grab" in texto_n:
-        if texto_n[5].isdigit():
+        if texto_n[5].isdigit() or texto_n[5].isalpha():
             Command = True
             
     if "letGo" in texto_n:
-        if texto_n[6].isdigit():
+        if texto_n[6].isdigit() or texto_n[6].isalpha():
             Command = True
             
     if "nop()" in texto_n:
@@ -163,36 +163,60 @@ def isValidDefinition (text):
     return Valid_definition
         
 
+archiv=input("direccion del archivo: ")
 
-
-with open("data/valido_2.txt", "r") as archivo:
+with open("data/"+archiv+".txt", "r") as archivo:
+    
+    lista_lineas=[]
+    
+    for lineal in archivo:
+        linea_c = lineal.replace(" ", "").replace("\n","")
+        lista_lineas.append(linea_c)
+        
+with open("data/"+archiv+".txt", "r") as archivo:
     
     for linea in archivo:
         
         lineas_archivo += 1
         defproc_valido = False
-        linea_n = linea.replace(" ", "")
+        linea_n = linea.replace(" ", "").replace("\n","")
+        bandera = None
         
         if linea_n == "{" or "{" in linea_n:
             numero_llaves_abiertas += 1
         
+        if (linea_n != "" and linea_n == "{") or (linea_n != "" and linea_n[len(linea_n)-1] =="{"):
+            bandera = True
+            
         if linea_n == "}" or "}" in linea_n:
             numero_llaves_cerradas += 1
-        
+            
+        if linea_n == "}":
+            bandera = False
         
         for defproc in lista_defprocs:
            if (defproc in linea_n) and ("defProc" not in linea_n):
                defproc_valido = True
                 
         
-        if ( (isCommand(linea_n) == True and linea_n[len(linea_n)-1] == ";" )  or (isValidControl(linea_n) == True)  or 
+        if ( (isCommand(linea_n) == True)  or (isValidControl(linea_n) == True)  or 
             (isValidDefinition(linea_n) == True) or (defproc_valido == True)  ):
             
             lineas_validas += 1
             
-        if len(linea_n) == 1:
+            
+        if linea_n == "":
             lineas_validas += 1
             
+        if linea_n == "{":
+            lineas_validas += 1
+        if linea_n == "}":
+            lineas_validas += 1
+        
+        if ((bandera == True) and (linea_n != "" or linea_n != "{") and (linea_n[len(linea_n)-1] !="{") and (lineas_archivo<len(lista_lineas)) and
+            (lista_lineas[lineas_archivo] != "}" or lista_lineas[lineas_archivo] != "") 
+            and (linea_n[len(linea_n)-1] != ";")) or ((bandera == False) and (linea_n[len(linea_n)-1] == ";")):
+                lineas_validas -= 1    
             
  
 
@@ -206,8 +230,8 @@ print(nabiertas)
 print(ncerradas)
 try:
     if (nabiertas == ncerradas):
-        lfinales = lvalidas + nabiertas + ncerradas   
-    if (larchivo == lfinales+1): 
+        lfinales = lvalidas   
+    if (larchivo == lfinales): 
          print("Programa válido")
     else:
         print("Programa inválido")
