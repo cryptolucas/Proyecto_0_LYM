@@ -161,6 +161,13 @@ def isValidDefinition (text):
         lista_defprocs.append(nombre_defproc)
     
     return Valid_definition
+
+
+
+
+
+
+
         
 
 archiv=input("direccion del archivo: ")
@@ -224,10 +231,7 @@ lvalidas = lineas_validas
 larchivo = lineas_archivo
 nabiertas = numero_llaves_abiertas
 ncerradas = numero_llaves_cerradas
-print(lvalidas)
-print(larchivo)
-print(nabiertas)
-print(ncerradas)
+
 try:
     if (nabiertas == ncerradas):
         lfinales = lvalidas   
